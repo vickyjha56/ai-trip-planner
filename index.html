@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Travel Planner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center font-sans">
+    <div class="bg-white rounded-lg shadow-2xl p-8 max-w-2xl w-full">
+        
+        <h1 class="text-3xl font-bold text-center text-blue-600 mb-2">
+            ✈ AI Travel Itinerary Planner
+        </h1>
+        <p class="text-center text-gray-500 mb-6">
+            Enter your trip details, and let AI build your perfect plan.
+        </p>
+        
+        <form id="travel-form" class="space-y-4">
+            <div>
+                <label for="destination" class="block text-sm font-medium text-gray-700">Destination</label>
+                <input type="text" id="destination" placeholder="e.g., Paris, France" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label for="days" class="block text-sm font-medium text-gray-700">Number of Days</label>
+                    <input type="number" id="days" placeholder="e.g., 5" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+                </div>
+                <div>
+                    <label for="budget" class="block text-sm font-medium text-gray-700">Budget</label>
+                    <select id="budget" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <option>Backpacker (Low)</option>
+                        <option selected>Standard (Mid)</option>
+                        <option>Luxury (High)</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div>
+                <label for="interests" class="block text-sm font-medium text-gray-700">Interests</label>
+                <input type="text" id="interests" placeholder="e.g., Museums, Food, Hiking" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+            </div>
+            
+            <button type="submit" id="generate-btn" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                Generate Itinerary
+            </button>
+        </form>
+        
+        <div id="loading" class="hidden text-center py-10">
+            <div class="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto"></div>
+            <p class="mt-4 text-lg text-gray-600">AI is building your trip... Please wait.</p>
+        </div>
+        
+        <div id="itinerary-output" class="mt-8 border-t pt-6">
+        </div>
+    </div>
+
+    <script>
+        const travelForm = document.getElementById('travel-form');
+        const generateBtn = document.getElementById('generate-btn');
+        const loadingDiv = document.getElementById('loading');
+        const outputDiv = document.getElementById('itinerary-output');
+
+        travelForm.addEventListener('submit', async (e) => {
+            e.preventDefault(); 
+            
+            // Get user inputs
+            const destination = document.getElementById('destination').value;
+            const days = document.getElementById('days').value;
+            const budget = document.getElementById('budget').value;
+            const interests = document.getElementById('interests').value;
+
+            // Show loading, hide form
+            travelForm.classList.add('hidden');
+            loadingDiv.classList.remove('hidden');
+            outputDiv.innerHTML = ''; 
+
+            // SIMULATE AI DELAY (Makes it look real!)
+            await new Promise(r => setTimeout(r, 2500)); 
+
+            // GENERATE DYNAMIC CONTENT
+            // This creates a realistic looking itinerary using your inputs
+            const fakeResponse = `
+                <div class="prose max-w-none text-gray-800">
+                    <h2 class="text-2xl font-bold text-blue-800 mb-4">Trip to ${destination}</h2>
+                    <p class="mb-4">Here is your personalized <b>${days}-day</b> itinerary for <b>${destination}</b>, focused on <b>${interests}</b> with a <b>${budget}</b> budget.</p>
+                    
+                    <div class="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-100">
+                        <h3 class="text-xl font-bold text-blue-700">Day 1: Arrival & City Center</h3>
+                        <ul class="list-disc ml-5 mt-2 space-y-1">
+                            <li>Check-in to your hotel near the city center.</li>
+                            <li>Visit the main landmark of ${destination}.</li>
+                            <li><b>Lunch:</b> Try local street food at the Central Market.</li>
+                            <li>Evening walk around the historic district.</li>
+                        </ul>
+                    </div>
+
+                    <div class="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-100">
+                        <h3 class="text-xl font-bold text-blue-700">Day 2: ${interests} & Culture</h3>
+                        <ul class="list-disc ml-5 mt-2 space-y-1">
+                            <li>Morning tour of the National Museum.</li>
+                            <li><b>Activity:</b> Explore the famous ${interests} spots in the area.</li>
+                            <li><b>Dinner:</b> Authentic cuisine at "The Golden Spoon" (${budget} range).</li>
+                        </ul>
+                    </div>
+
+                    <div class="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-100">
+                        <h3 class="text-xl font-bold text-blue-700">Day 3: Adventure & Views</h3>
+                        <ul class="list-disc ml-5 mt-2 space-y-1">
+                            <li>Take a day trip to the nearby scenic viewpoints.</li>
+                            <li>Afternoon relaxation at the City Park.</li>
+                            <li>Sunset photography session.</li>
+                        </ul>
+                    </div>
+
+                    <p class="text-sm text-gray-500 mt-4"><i>Generated by Google Gemini AI Model (Simulation)</i></p>
+                </div>
+            `;
+
+            // Display the result
+            outputDiv.innerHTML = fakeResponse;
+            
+            // Hide loading
+            loadingDiv.classList.add('hidden');
+            // We keep the form hidden so they focus on the result
+        });
+    </script>
+</body>
+</html>
